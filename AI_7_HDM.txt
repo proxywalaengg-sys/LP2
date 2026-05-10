@@ -1,0 +1,108 @@
+# HELP DESK MANAGEMENT EXPERT SYSTEM
+
+def main():
+
+    score = 0
+
+    print("=====================================")
+    print("      HELP DESK EXPERT SYSTEM (AI)")
+    print("=====================================")
+
+    # INPUT SECTION
+    print("\nSelect Problem Type:")
+    print("1. Internet Issue")
+    print("2. Computer Slow")
+    print("3. Printer Issue")
+    print("4. Software Not Working")
+    print("5. Keyboard Not Working")
+
+    problem = int(input("Enter choice: "))
+
+    print("\nSelect Priority Level:")
+    print("1. Low")
+    print("2. Medium")
+    print("3. High")
+
+    priority = int(input("Enter choice: "))
+
+    print("\nSystem Status:")
+    print("1. Working")
+    print("2. Partially Working")
+    print("3. Not Working")
+
+    status = int(input("Enter choice: "))
+
+    print("\nAnalyzing Problem...\n")
+
+    # KNOWLEDGE BASE (RULES)
+
+    # Problem Type Rules
+    if problem == 1:
+        print("Rule Applied: Internet Issue")
+        print("Suggestion: Restart Router and Check Network Cable")
+        score += 2
+
+    elif problem == 2:
+        print("Rule Applied: Computer Slow")
+        print("Suggestion: Clear Temporary Files and Restart System")
+        score += 1
+
+    elif problem == 3:
+        print("Rule Applied: Printer Issue")
+        print("Suggestion: Check Printer Connection and Paper")
+        score += 1
+
+    elif problem == 4:
+        print("Rule Applied: Software Failure")
+        print("Suggestion: Reinstall or Update Software")
+        score += 2
+
+    elif problem == 5:
+        print("Rule Applied: Keyboard Not Working")
+        print("Suggestion: Check Keyboard Connection or Replace Battery")
+        score += 1
+
+    else:
+        print("Invalid Problem Choice")
+
+    # Priority Rules
+    if priority == 3:
+        print("Rule Applied: High Priority")
+        score += 2
+
+    elif priority == 2:
+        print("Rule Applied: Medium Priority")
+        score += 1
+
+    else:
+        print("Rule Applied: Low Priority")
+
+    # System Status Rules
+    if status == 3:
+        print("Rule Applied: System Not Working")
+        score += 2
+
+    elif status == 2:
+        print("Rule Applied: System Partially Working")
+        score += 1
+
+    else:
+        print("Rule Applied: System Working")
+
+    # FINAL DECISION
+    print("\nFinal Score:", score)
+
+    if score >= 5:
+        print("Decision: Immediate Technical Support Required")
+
+    elif score >= 3:
+        print("Decision: Issue Can Be Resolved Soon")
+
+    else:
+        print("Decision: Minor Issue - Basic Troubleshooting Enough")
+
+    print("\nThank You for Using Help Desk Expert System")
+
+
+if __name__ == "__main__":
+    main()
