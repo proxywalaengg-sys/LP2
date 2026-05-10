@@ -1,0 +1,204 @@
+import heapq
+
+
+# Node Class
+class Node:
+
+    def __init__(self, state, parent, g, h):
+
+        self.state = state
+        self.parent = parent
+        self.g = g
+        self.h = h
+        self.f = g + h
+
+    def __lt__(self, other):
+        return self.f < other.f
+
+
+# Heuristic Function (Manhattan Distance)
+def heuristic(state, goal_state):
+
+    distance = 0
+
+    for i in range(3):
+        for j in range(3):
+
+            value = state[i][j]
+
+            if value != 0:
+
+                # Find value position in goal state
+                for x in range(3):
+                    for y in range(3):
+
+                        if goal_state[x][y] == value:
+
+                            goal_x = x
+                            goal_y = y
+
+                distance += abs(i - goal_x) + abs(j - goal_y)
+
+    return distance
+
+
+# Find Blank Tile
+def find_blank(state):
+
+    for i in range(3):
+        for j in range(3):
+
+            if state[i][j] == 0:
+                return i, j
+
+
+# Convert State to Tuple
+def state_to_tuple(state):
+
+    return tuple(tuple(row) for row in state)
+
+
+# Generate Neighbor States
+def get_neighbors(state):
+
+    neighbors = []
+
+    x, y = find_blank(state)
+
+    moves = [
+        (-1, 0),
+        (1, 0),
+        (0, -1),
+        (0, 1)
+    ]
+
+    for dx, dy in moves:
+
+        nx = x + dx
+        ny = y + dy
+
+        if 0 <= nx < 3 and 0 <= ny < 3:
+
+            new_state = [row[:] for row in state]
+
+            # Swap blank tile
+            new_state[x][y], new_state[nx][ny] = \
+                new_state[nx][ny], new_state[x][y]
+
+            neighbors.append(new_state)
+
+    return neighbors
+
+
+# Print Solution Path
+def print_path(node):
+
+    path = []
+
+    while node:
+        path.append(node.state)
+        node = node.parent
+
+    path.reverse()
+
+    print("\nSolution Path:\n")
+
+    step = 0
+
+    for state in path:
+
+        print("Step", step)
+
+        for row in state:
+            print(row)
+
+        print()
+
+        step += 1
+
+
+# A* Algorithm
+def a_star(start_state, goal_state):
+
+    open_list = []
+
+    closed_set = set()
+
+    start_node = Node(
+        start_state,
+        None,
+        0,
+        heuristic(start_state, goal_state)
+    )
+
+    heapq.heappush(open_list, start_node)
+
+    while open_list:
+
+        current = heapq.heappop(open_list)
+
+        # Goal Check
+        if current.state == goal_state:
+
+            print("\nGoal State Reached!")
+            print("Total Moves =", current.g)
+
+            print_path(current)
+
+            return
+
+        closed_set.add(state_to_tuple(current.state))
+
+        # Generate Neighbors
+        for neighbor in get_neighbors(current.state):
+
+            if state_to_tuple(neighbor) in closed_set:
+                continue
+
+            neighbor_node = Node(
+                neighbor,
+                current,
+                current.g + 1,
+                heuristic(neighbor, goal_state)
+            )
+
+            heapq.heappush(open_list, neighbor_node)
+
+    print("No Solution Found")
+
+
+# Main Function
+def main():
+
+    print("Enter Initial State")
+    print("Use 0 for blank space\n")
+
+    start_state = []
+
+    for i in range(3):
+        row = list(map(int, input().split()))
+        start_state.append(row)
+
+    print("\nEnter Goal State\n")
+
+    goal_state = []
+
+    for i in range(3):
+        row = list(map(int, input().split()))
+        goal_state.append(row)
+
+    print("\nInitial State:")
+
+    for row in start_state:
+        print(row)
+
+    print("\nGoal State:")
+
+    for row in goal_state:
+        print(row)
+
+    a_star(start_state, goal_state)
+
+
+if __name__ == "__main__":
+    main()
