@@ -1,0 +1,191 @@
+import heapq
+
+# ---------------- Dijkstra's Algorithm ----------------
+def dijkstra(graph, start, n):
+    dist = [float('inf')] * n
+    dist[start] = 0
+
+    pq = []
+    heapq.heappush(pq, (0, start))
+
+    while pq:
+        current_dist, u = heapq.heappop(pq)
+
+        for v, weight in graph[u]:
+            if dist[v] > current_dist + weight:
+                dist[v] = current_dist + weight
+                heapq.heappush(pq, (dist[v], v))
+
+    print("\nShortest distances from source:")
+    for i in range(n):
+        print(f"Vertex {i} -> Distance {dist[i]}")
+
+
+# ---------------- Kruskal's Algorithm ----------------
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = []
+
+    def add_edge(self, u, v, w):
+        self.graph.append([u, v, w])
+
+    def find(self, parent, i):
+        if parent[i] != i:
+            parent[i] = self.find(parent, parent[i])
+        return parent[i]
+
+    def union(self, parent, rank, x, y):
+        root_x = self.find(parent, x)
+        root_y = self.find(parent, y)
+
+        if rank[root_x] < rank[root_y]:
+            parent[root_x] = root_y
+        elif rank[root_x] > rank[root_y]:
+            parent[root_y] = root_x
+        else:
+            parent[root_y] = root_x
+            rank[root_x] += 1
+
+    def kruskal_mst(self):
+        result = []
+        i, e = 0, 0
+
+        self.graph.sort(key=lambda item: item[2])
+
+        parent = []
+        rank = []
+
+        for node in range(self.V):
+            parent.append(node)
+            rank.append(0)
+
+        while e < self.V - 1 and i < len(self.graph):
+            u, v, w = self.graph[i]
+            i += 1
+
+            x = self.find(parent, u)
+            y = self.find(parent, v)
+
+            if x != y:
+                result.append([u, v, w])
+                e += 1
+                self.union(parent, rank, x, y)
+
+        print("\nEdges in MST:")
+        total_cost = 0
+
+        for u, v, w in result:
+            print(f"{u} -- {v} == {w}")
+            total_cost += w
+
+        print("Total Cost:", total_cost)
+
+
+# ---------------- Selection Sort ----------------
+def selection_sort(arr):
+
+    n = len(arr)
+
+    # Traverse through entire array
+    for i in range(n):
+
+        # Assume current index has minimum element
+        min_index = i
+
+        # Find minimum element in remaining array
+        for j in range(i + 1, n):
+
+            if arr[j] < arr[min_index]:
+                min_index = j
+
+        # Swap minimum element with current element
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+
+        print(f"Pass {i + 1}: {arr}")
+
+    return arr
+
+
+# ---------------- Menu Driven Program ----------------
+def main():
+
+    while True:
+
+        print("\n===== MENU =====")
+        print("1. Kruskal Algorithm")
+        print("2. Dijkstra Algorithm")
+        print("3. Selection Sort")
+        print("4. Exit")
+
+        choice = int(input("Enter your choice: "))
+
+        # -------- Kruskal --------
+        if choice == 1:
+
+            V = int(input("Enter number of vertices: "))
+            E = int(input("Enter number of edges: "))
+
+            g = Graph(V)
+
+            print("Enter edges (u v weight):")
+
+            for _ in range(E):
+                u, v, w = map(int, input().split())
+                g.add_edge(u, v, w)
+
+            g.kruskal_mst()
+
+        # -------- Dijkstra --------
+        elif choice == 2:
+
+            n = int(input("Enter number of vertices: "))
+            e = int(input("Enter number of edges: "))
+
+            graph = {i: [] for i in range(n)}
+
+            print("Enter edges (u v weight):")
+
+            for _ in range(e):
+                u, v, w = map(int, input().split())
+                graph[u].append((v, w))
+                graph[v].append((u, w))   # Remove if graph is directed
+
+            start = int(input("Enter source vertex: "))
+
+            dijkstra(graph, start, n)
+
+        # -------- Selection Sort --------
+        elif choice == 3:
+
+            n = int(input("Enter number of elements: "))
+
+            arr = []
+
+            print("Enter elements:")
+
+            for i in range(n):
+                element = int(input())
+                arr.append(element)
+
+            print("\nOriginal Array:")
+            print(arr)
+
+            sorted_array = selection_sort(arr)
+
+            print("\nSorted Array:")
+            print(sorted_array)
+
+        # -------- Exit --------
+        elif choice == 4:
+
+            print("Exiting program...")
+            break
+
+        else:
+            print("Invalid choice! Try again.")
+
+
+# ---------------- Run Program ----------------
+if __name__ == "__main__":
+    main()
