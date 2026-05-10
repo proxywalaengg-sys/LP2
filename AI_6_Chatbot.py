@@ -124,35 +124,3 @@ def chatbot():
 
 # DRIVER CODE
 chatbot()
-
---------------------------------------------------
-
-Type of Chatbot Used
-
-This is a:
-
-Rule-Based Chatbot
-
-It works using:
-
-predefined patterns
-keyword matching
-regular expressions.
-
-AI Concept Used
-
-The chatbot uses:
-
-Pattern Matching
-Regular Expressions
-Decision Making
-Human-computer interaction
-
-
-Sir/Madam, this program implements a rule-based AI chatbot for customer support interaction.
-
-The chatbot uses regular expressions to match user queries with predefined patterns.
-
-Depending on the keywords entered by the user, the chatbot returns suitable responses related to pricing, refund, subscription, technical support, and other services.
-
-The chatbot runs continuously until the user enters exit commands like bye or goodbye.
